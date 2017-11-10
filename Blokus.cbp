@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Blokus" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/Blokus" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-std=c99" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/Blokus" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Unit filename="include/affichage.h" />
+		<Unit filename="include/bloc.h" />
+		<Unit filename="include/console.h" />
+		<Unit filename="include/piece.h" />
+		<Unit filename="include/pieces_loader.h" />
+		<Unit filename="include/plateau.h" />
+		<Unit filename="ressources/pieces/A.txt" />
+		<Unit filename="ressources/pieces/B.txt" />
+		<Unit filename="ressources/pieces/C.txt" />
+		<Unit filename="ressources/pieces/D.txt" />
+		<Unit filename="ressources/pieces/E.txt" />
+		<Unit filename="ressources/pieces/F.txt" />
+		<Unit filename="ressources/pieces/G.txt" />
+		<Unit filename="ressources/pieces/H.txt" />
+		<Unit filename="ressources/pieces/I.txt" />
+		<Unit filename="ressources/pieces/J.txt" />
+		<Unit filename="ressources/pieces/K.txt" />
+		<Unit filename="ressources/pieces/L.txt" />
+		<Unit filename="ressources/pieces/M.txt" />
+		<Unit filename="ressources/pieces/N.txt" />
+		<Unit filename="ressources/pieces/O.txt" />
+		<Unit filename="ressources/pieces/P.txt" />
+		<Unit filename="ressources/pieces/Q.txt" />
+		<Unit filename="ressources/pieces/R.txt" />
+		<Unit filename="ressources/pieces/S.txt" />
+		<Unit filename="ressources/pieces/T.txt" />
+		<Unit filename="ressources/pieces/U.txt" />
+		<Unit filename="src/affichage.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/bloc.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/console.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/piece.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/pieces_loader.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/plateau.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
