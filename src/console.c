@@ -13,7 +13,7 @@ void afficher_piece(t_piece *piece)
     int i;
     for (i = 0; i < piece->nb_blocs; i++)
     {
-        gotoxy(piece->blocs[i].x + 5, piece->blocs[i].y + y);
+        gotoxy(piece->blocs[i].coord.x + 5, piece->blocs[i].coord.y + y);
         printf("%c", piece->symbole);
     }
 }

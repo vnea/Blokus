@@ -13,9 +13,10 @@ typedef struct plateau
 
 void initialiser_plateau(t_plateau *plateau);
 
-int peut_poser_piece_dans_plateau(t_plateau *plateau, t_piece *piece, int pos_x, int pos_y);
-int bloc_angle_d_une_piece_est_valide(t_plateau *plateau, t_piece *piece, int pos_x, int pos_y);
-void poser_piece(t_plateau *plateau, t_piece *piece, int pos_x, int pos_y);
+int peut_poser_piece_dans_plateau(t_plateau *plateau, t_piece *piece, t_coord *coord, int premier_coup);
+int bloc_angle_d_une_piece_est_valide(t_plateau *plateau, t_piece *piece, t_coord *coord, t_bloc *bloc_plus_haut_gauche);
+int bloc_angle_d_une_piece_est_dans_un_coin(t_plateau *plateau, t_piece *piece, t_coord *coord, t_bloc *bloc_plus_haut_gauche);
+void poser_piece(t_plateau *plateau, t_piece *piece, t_coord *coord);
 
 void afficher_plateau(t_plateau *plateau);
 

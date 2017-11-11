@@ -13,8 +13,7 @@ void initialiser_piece(t_piece *piece, char symbole, t_bloc blocs[NB_BLOCS_MAX],
     int i;
     for (i = 0; i < piece->nb_blocs; i++)
     {
-        piece->blocs[i].x = blocs[i].x;
-        piece->blocs[i].y = blocs[i].y;
+        piece->blocs[i].coord = blocs[i].coord;
         piece->blocs[i].est_un_angle = blocs[i].est_un_angle;
         piece->blocs[i].piece = blocs[i].piece;
     }
@@ -63,7 +62,7 @@ void charger_pieces(t_piece pieces[NB_PIECES_MAX])
             int i;
             for (i = 0; i < nb_blocs; i++)
             {
-                fscanf(fichier_piece, "%d %d %c", &blocs[i].x, &blocs[i].y, &blocs[i].est_un_angle);
+                fscanf(fichier_piece, "%d %d %c", &blocs[i].coord.x, &blocs[i].coord.y, &blocs[i].est_un_angle);
                 blocs[i].piece = &pieces[nb_pieces];
             }
 
@@ -79,7 +78,7 @@ void rotation_gauche_piece(t_piece *piece)
     int i;
     for (i = 0; i < piece->nb_blocs; i++)
     {
-        rotation_gauche_bloc(piece->blocs);
+        rotation_gauche_bloc(&piece->blocs[i]);
     }
 }
 
@@ -88,6 +87,24 @@ void rotation_droite_piece(t_piece *piece)
     int i;
     for (i = 0; i < piece->nb_blocs; i++)
     {
-        rotation_droite_bloc(piece->blocs);
+        rotation_droite_bloc(&piece->blocs[i]);
     }
+}
+
+t_bloc* trouver_bloc_plus_haut_gauche_piece(t_piece *piece)
+{
+    t_bloc *bloc_plus_haut_gauche = &piece->blocs[0];
+
+    int i;
+    for (i = 1; i < piece->nb_blocs; i++)
+    {
+        t_bloc *bloc_courant = &piece->blocs[i];
+        if (bloc_courant->coord.y < bloc_plus_haut_gauche->coord.y &&
+            bloc_courant->coord.x < bloc_plus_haut_gauche->coord.x)
+        {
+            bloc_plus_haut_gauche = bloc_courant;
+        }
+    }
+
+    return bloc_plus_haut_gauche;
 }
