@@ -91,6 +91,15 @@ void rotation_droite_piece(t_piece *piece)
     }
 }
 
+void inverser_piece(t_piece *piece)
+{
+    int i;
+    for (i = 0; i < piece->nb_blocs; i++)
+    {
+        inverser_bloc(&piece->blocs[i]);
+    }
+}
+
 t_bloc* trouver_bloc_plus_haut_gauche_piece(t_piece *piece)
 {
     t_bloc *bloc_plus_haut_gauche = &piece->blocs[0];

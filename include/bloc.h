@@ -14,5 +14,6 @@ typedef struct bloc
 
 void rotation_gauche_bloc(t_bloc *bloc);
 void rotation_droite_bloc(t_bloc *bloc);
+void inverser_bloc(t_bloc *bloc);
 
 #endif // BLOC_H_INCLUDED

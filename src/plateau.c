@@ -1,5 +1,6 @@
 #include <stdio.h>
 
+#include "../include/affichage.h"
 #include "../include/plateau.h"
 
 void initialiser_plateau(t_plateau *plateau)
@@ -231,7 +232,7 @@ void afficher_plateau(t_plateau *plateau)
             t_bloc *bloc_courant = plateau->damier[ligne][colonne];
             if (bloc_courant)
             {
-                 printf("%c", bloc_courant->piece->symbole);
+                print_char_couleur(bloc_courant->piece->symbole, bloc_courant->piece->couleur);
             }
             else
             {
@@ -240,4 +241,5 @@ void afficher_plateau(t_plateau *plateau)
         }
         printf("|");
     }
+    printf("\n");
 }

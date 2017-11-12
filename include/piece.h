@@ -23,6 +23,7 @@ void charger_pieces(t_piece pieces[NB_PIECES_MAX]);
 
 void rotation_gauche_piece(t_piece *piece);
 void rotation_droite_piece(t_piece *piece);
+void inverser_piece(t_piece *piece);
 
 t_bloc* trouver_bloc_plus_haut_gauche_piece(t_piece *piece);
 

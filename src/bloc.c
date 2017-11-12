@@ -13,3 +13,8 @@ void rotation_droite_bloc(t_bloc *bloc)
     bloc->coord.x = -bloc->coord.y;
     bloc->coord.y = valeur_x_de_base;
 }
+
+void inverser_bloc(t_bloc *bloc)
+{
+    bloc->coord.x = -bloc->coord.x;
+}
