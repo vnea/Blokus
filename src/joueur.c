@@ -8,54 +8,89 @@ void initialiser_joueur(t_joueur *joueur, char pseudo[TAILLE_PSEUDO_MAX], t_piec
 {
     strcpy(joueur->pseudo, pseudo);
     joueur->premier_coup = 1;
+    joueur->a_perdu = 0;
 
-    int i;
-    for (i = 0; i < NB_PIECES_MAX; i++)
+    int num_piece;
+    for (num_piece = 0; num_piece < NB_PIECES_MAX; num_piece++)
     {
-        joueur->piece_deja_posee[i] = 0;
+        joueur->piece_deja_posee[num_piece] = 0;
 
-        t_piece *piece_courante = &joueur->pieces[i];
-        piece_courante->symbole = pieces[i].symbole;
+        t_piece *piece_courante = &joueur->pieces[num_piece];
+        piece_courante->symbole = pieces[num_piece].symbole;
         piece_courante->couleur = couleur_pieces;
-        int j;
-        for (j = 0; j < pieces[i].nb_blocs; j++)
+        int num_bloc;
+        for (num_bloc = 0; num_bloc < pieces[num_piece].nb_blocs; num_bloc++)
         {
-            piece_courante->blocs[j].coord = pieces[i].blocs[j].coord;
-            piece_courante->blocs[j].est_un_angle = pieces[i].blocs[j].est_un_angle;
-            piece_courante->blocs[j].piece = piece_courante;
+            piece_courante->blocs[num_bloc].coord = pieces[num_piece].blocs[num_bloc].coord;
+            piece_courante->blocs[num_bloc].est_un_angle = pieces[num_piece].blocs[num_bloc].est_un_angle;
+            piece_courante->blocs[num_bloc].piece = piece_courante;
         }
-        piece_courante->nb_blocs = pieces[i].nb_blocs;
+        piece_courante->nb_blocs = pieces[num_piece].nb_blocs;
     }
 
     poser_toutes_les_pieces_dans_plateau_selection_piece(joueur);
 }
 
+int peut_encore_jouer(t_joueur *joueur, t_plateau *plateau)
+{
+    // Pas besoin de refaire le calcul si le joueur a déjà perdu
+    if (joueur->a_perdu)
+    {
+        return 0;
+    }
+
+    int num_piece;
+    for (num_piece = 0; num_piece < NB_PIECES_MAX; num_piece++)
+    {
+        if (!joueur->piece_deja_posee[num_piece])
+        {
+            int ligne;
+            for (ligne = 0; ligne < NB_LIGNES; ligne++)
+            {
+                int colonne;
+                for (colonne = 0; colonne < NB_COLONNES; colonne++)
+                {
+                    t_piece copie_piece = joueur->pieces[num_piece];
+                    t_coord pos_piece_dans_plateau = {colonne, ligne};
+                    if (peut_poser_piece_dans_plateau(plateau, &copie_piece, &pos_piece_dans_plateau, joueur->premier_coup))
+                    {
+                        return 1;
+                    }
+                }
+            }
+        }
+    }
+
+    joueur->a_perdu = 0;
+    return joueur->a_perdu;
+}
+
 void poser_piece_dans_plateau_selection_piece(t_joueur *joueur, t_piece *piece, t_coord *coord)
 {
-    int i;
-    for (i = 0; i < piece->nb_blocs; i++)
+    t_bloc *bloc_plus_haut_gauche = trouver_bloc_plus_haut_gauche_piece(piece);
+
+    int num_bloc;
+    for (num_bloc = 0; num_bloc < piece->nb_blocs; num_bloc++)
     {
         t_coord coord_piece_dans_plateau_selection_piece =
         {
-            piece->blocs[i].coord.x + coord->x,
-            piece->blocs[i].coord.y + coord->y
+            piece->blocs[num_bloc].coord.x - bloc_plus_haut_gauche->coord.x + coord->x,
+            piece->blocs[num_bloc].coord.y - bloc_plus_haut_gauche->coord.y + coord->y
         };
-        joueur->plateau_selection_piece[coord_piece_dans_plateau_selection_piece.y][coord_piece_dans_plateau_selection_piece.x] = piece->blocs[i];
+        joueur->plateau_selection_piece[coord_piece_dans_plateau_selection_piece.y][coord_piece_dans_plateau_selection_piece.x] = &piece->blocs[num_bloc];
     }
 }
 
 void poser_toutes_les_pieces_dans_plateau_selection_piece(t_joueur *joueur)
 {
     // On met des blocs "vides"
-    int i;
-    for (i = 0; i < NB_LIGNES_PLATEAU_JOUEUR; i++)
+    int ligne;
+    for (ligne = 0; ligne < NB_LIGNES_PLATEAU_JOUEUR; ligne++)
     {
-        int j;
-        for (j = 0; j < NB_COLONNES_PLATEAU_JOUEUR; j++)
+        int colonne;
+        for (colonne = 0; colonne < NB_COLONNES_PLATEAU_JOUEUR; colonne++)
         {
-            t_bloc bloc;
-            bloc.piece = NULL;
-            joueur->plateau_selection_piece[i][j] = bloc;
+            joueur->plateau_selection_piece[ligne][colonne] = NULL;
         }
     }
 
@@ -133,8 +168,8 @@ void afficher_pieces_joueur(t_joueur *joueur)
         for (colonne = 0; colonne < NB_COLONNES_PLATEAU_JOUEUR; colonne++)
         {
             printf("|");
-            t_bloc *bloc_courant = &joueur->plateau_selection_piece[ligne][colonne];
-            if (bloc_courant->piece)
+            t_bloc *bloc_courant = joueur->plateau_selection_piece[ligne][colonne];
+            if (bloc_courant)
             {
                 t_piece *piece_du_bloc = bloc_courant->piece;
                 if (joueur->piece_deja_posee[piece_du_bloc->symbole - 'A'])

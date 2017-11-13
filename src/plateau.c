@@ -5,13 +5,13 @@
 
 void initialiser_plateau(t_plateau *plateau)
 {
-    int index_ligne;
-    for (index_ligne = 0; index_ligne < NB_LIGNES; index_ligne++)
+    int ligne;
+    for (ligne = 0; ligne < NB_LIGNES; ligne++)
     {
-        int index_colonne;
-        for (index_colonne = 0; index_colonne < NB_COLONNES; index_colonne++)
+        int colonne;
+        for (colonne = 0; colonne < NB_COLONNES; colonne++)
         {
-            plateau->damier[index_ligne][index_colonne] = NULL;
+            plateau->damier[ligne][colonne] = NULL;
         }
     }
 }
@@ -20,10 +20,10 @@ int peut_poser_piece_dans_plateau(t_plateau *plateau, t_piece *piece, t_coord *c
 {
     t_bloc *bloc_plus_haut_gauche = trouver_bloc_plus_haut_gauche_piece(piece);
 
-    int i;
-    for (i = 0; i < piece->nb_blocs; i++)
+    int num_bloc;
+    for (num_bloc = 0; num_bloc < piece->nb_blocs; num_bloc++)
     {
-        t_bloc *bloc_courant = &piece->blocs[i];
+        t_bloc *bloc_courant = &piece->blocs[num_bloc];
         t_coord coord_piece_dans_plateau =
         {
             bloc_courant->coord.x - bloc_plus_haut_gauche->coord.x + coord->x,
@@ -101,10 +101,10 @@ int peut_poser_piece_dans_plateau(t_plateau *plateau, t_piece *piece, t_coord *c
 
 int bloc_angle_d_une_piece_est_valide(t_plateau *plateau, t_piece *piece, t_coord *coord, t_bloc *bloc_plus_haut_gauche)
 {
-    int i;
-    for (i = 0; i < piece->nb_blocs; i++)
+    int num_bloc;
+    for (num_bloc = 0; num_bloc < piece->nb_blocs; num_bloc++)
     {
-        t_bloc *bloc_courant = &piece->blocs[i];
+        t_bloc *bloc_courant = &piece->blocs[num_bloc];
 
         if (bloc_courant->est_un_angle)
         {
@@ -166,10 +166,10 @@ int bloc_angle_d_une_piece_est_valide(t_plateau *plateau, t_piece *piece, t_coor
 
 int bloc_angle_d_une_piece_est_dans_un_coin(t_plateau *plateau, t_piece *piece, t_coord *coord, t_bloc *bloc_plus_haut_gauche)
 {
-    int i;
-    for (i = 0; i < piece->nb_blocs; i++)
+    int num_bloc;
+    for (num_bloc = 0; num_bloc < piece->nb_blocs; num_bloc++)
     {
-        t_bloc *bloc_courant = &piece->blocs[i];
+        t_bloc *bloc_courant = &piece->blocs[num_bloc];
 
         if (bloc_courant->est_un_angle)
         {
@@ -197,10 +197,10 @@ void poser_piece(t_plateau *plateau, t_piece *piece, t_coord *coord)
 {
     t_bloc *bloc_plus_haut_gauche = trouver_bloc_plus_haut_gauche_piece(piece);
 
-    int i;
-    for (i = 0; i < piece->nb_blocs; i++)
+    int num_bloc;
+    for (num_bloc = 0; num_bloc < piece->nb_blocs; num_bloc++)
     {
-        t_bloc *bloc_courant = &piece->blocs[i];
+        t_bloc *bloc_courant = &piece->blocs[num_bloc];
         t_coord coord_piece_dans_plateau =
         {
             bloc_courant->coord.x - bloc_plus_haut_gauche->coord.x + coord->x,

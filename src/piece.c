@@ -10,12 +10,12 @@ void initialiser_piece(t_piece *piece, char symbole, t_bloc blocs[NB_BLOCS_MAX],
     piece->couleur = 1;
 
     piece->nb_blocs = nb_blocs;
-    int i;
-    for (i = 0; i < piece->nb_blocs; i++)
+    int num_bloc;
+    for (num_bloc = 0; num_bloc < piece->nb_blocs; num_bloc++)
     {
-        piece->blocs[i].coord = blocs[i].coord;
-        piece->blocs[i].est_un_angle = blocs[i].est_un_angle;
-        piece->blocs[i].piece = blocs[i].piece;
+        piece->blocs[num_bloc].coord = blocs[num_bloc].coord;
+        piece->blocs[num_bloc].est_un_angle = blocs[num_bloc].est_un_angle;
+        piece->blocs[num_bloc].piece = blocs[num_bloc].piece;
     }
 }
 
@@ -46,10 +46,10 @@ void charger_pieces(t_piece pieces[NB_PIECES_MAX])
         "ressources/pieces/U.txt"
     };
 
-    int nb_pieces;
-    for (nb_pieces = 0; nb_pieces < NB_PIECES_MAX; nb_pieces++)
+    int num_piece;
+    for (num_piece = 0; num_piece < NB_PIECES_MAX; num_piece++)
     {
-        FILE *fichier_piece = fopen(chemin_vers_pieces[nb_pieces], "r");
+        FILE *fichier_piece = fopen(chemin_vers_pieces[num_piece], "r");
         if (fichier_piece)
         {
             char symbole;
@@ -59,14 +59,14 @@ void charger_pieces(t_piece pieces[NB_PIECES_MAX])
             fscanf(fichier_piece, "%d", &nb_blocs);
 
             t_bloc blocs[NB_BLOCS_MAX];
-            int i;
-            for (i = 0; i < nb_blocs; i++)
+            int num_bloc;
+            for (num_bloc = 0; num_bloc < nb_blocs; num_bloc++)
             {
-                fscanf(fichier_piece, "%d %d %c", &blocs[i].coord.x, &blocs[i].coord.y, &blocs[i].est_un_angle);
-                blocs[i].piece = &pieces[nb_pieces];
+                fscanf(fichier_piece, "%d %d %c", &blocs[num_bloc].coord.x, &blocs[num_bloc].coord.y, &blocs[num_bloc].est_un_angle);
+                blocs[num_bloc].piece = &pieces[num_piece];
             }
 
-            initialiser_piece(&pieces[nb_pieces], symbole, blocs, nb_blocs);
+            initialiser_piece(&pieces[num_piece], symbole, blocs, nb_blocs);
         }
         fclose(fichier_piece);
     }
@@ -75,28 +75,35 @@ void charger_pieces(t_piece pieces[NB_PIECES_MAX])
 
 void rotation_gauche_piece(t_piece *piece)
 {
-    int i;
-    for (i = 0; i < piece->nb_blocs; i++)
+    int num_bloc;
+    for (num_bloc = 0; num_bloc < piece->nb_blocs; num_bloc++)
     {
-        rotation_gauche_bloc(&piece->blocs[i]);
+        t_bloc *bloc_courant = &piece->blocs[num_bloc];
+        int valeur_x_de_base = bloc_courant->coord.x;
+        bloc_courant->coord.x = bloc_courant->coord.y;
+        bloc_courant->coord.y = -valeur_x_de_base;
     }
 }
 
 void rotation_droite_piece(t_piece *piece)
 {
-    int i;
-    for (i = 0; i < piece->nb_blocs; i++)
+    int num_bloc;
+    for (num_bloc = 0; num_bloc < piece->nb_blocs; num_bloc++)
     {
-        rotation_droite_bloc(&piece->blocs[i]);
+        t_bloc *bloc_courant = &piece->blocs[num_bloc];
+        int valeur_x_de_base = bloc_courant->coord.x;
+        bloc_courant->coord.x = -bloc_courant->coord.y;
+        bloc_courant->coord.y = valeur_x_de_base;
     }
 }
 
 void inverser_piece(t_piece *piece)
 {
-    int i;
-    for (i = 0; i < piece->nb_blocs; i++)
+    int num_bloc;
+    for (num_bloc = 0; num_bloc < piece->nb_blocs; num_bloc++)
     {
-        inverser_bloc(&piece->blocs[i]);
+        t_bloc *bloc_courant = &piece->blocs[num_bloc];
+        bloc_courant->coord.x = -bloc_courant->coord.x;
     }
 }
 
@@ -104,10 +111,10 @@ t_bloc* trouver_bloc_plus_haut_gauche_piece(t_piece *piece)
 {
     t_bloc *bloc_plus_haut_gauche = &piece->blocs[0];
 
-    int i;
-    for (i = 1; i < piece->nb_blocs; i++)
+    int num_bloc;
+    for (num_bloc = 1; num_bloc < piece->nb_blocs; num_bloc++)
     {
-        t_bloc *bloc_courant = &piece->blocs[i];
+        t_bloc *bloc_courant = &piece->blocs[num_bloc];
         if (bloc_courant->coord.y < bloc_plus_haut_gauche->coord.y &&
             bloc_courant->coord.x < bloc_plus_haut_gauche->coord.x)
         {

@@ -59,8 +59,9 @@ int main()
 
         printf("\nPositionnez la piece dans la grille (ex : A 15): ");
         t_coord pos_piece_dans_plateau;
-        scanf(" %c", &pos_piece_dans_plateau.x);
-        pos_piece_dans_plateau.x -= 'A';
+        char lettre_col;
+        scanf(" %c", &lettre_col);
+        pos_piece_dans_plateau.x = lettre_col - 'A';
 
         scanf(" %d", &pos_piece_dans_plateau.y);
         pos_piece_dans_plateau.y--;
