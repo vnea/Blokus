@@ -28,6 +28,7 @@ void initialiser_joueur(t_joueur *joueur, char pseudo[TAILLE_PSEUDO_MAX], t_piec
         piece_courante->nb_blocs = pieces[num_piece].nb_blocs;
     }
 
+    joueur->piece_selectionnee = NULL;
     poser_toutes_les_pieces_dans_plateau_selection_piece(joueur);
 }
 

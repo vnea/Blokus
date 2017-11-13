@@ -1,12 +1,12 @@
 #ifndef PIECE_H_INCLUDED
 #define PIECE_H_INCLUDED
 
-#define NB_PIECES_MAX 21
-#define NB_BLOCS_MAX 5
-
 #include <stddef.h>
 
 #include "bloc.h"
+
+#define NB_PIECES_MAX 21
+#define NB_BLOCS_MAX 5
 
 typedef struct bloc t_bloc;
 typedef struct piece

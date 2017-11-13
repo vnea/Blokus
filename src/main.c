@@ -1,6 +1,8 @@
+#include<conio.h>
 #include<ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <windows.h>
 
 #include "../include/console.h"
@@ -9,6 +11,8 @@
 #include "../include/bloc.h"
 #include "../include/affichage.h"
 #include "../include/joueur.h"
+
+#define BUFFER 64
 
 int main()
 {
@@ -46,16 +50,20 @@ int main()
         printf("\n%s, a vous de jouer !\n", joueur_courant->pseudo);
         printf("Choisissez la piece a poser : ");
         char piece;
-        scanf(" %c", &piece);
+        scanf("%c", &piece);
+        getchar();
         piece = toupper(piece);
 
-        t_piece *piece_selectionnee = &joueur_courant->pieces[piece - 'A'];
-/*
+        joueur_courant->piece_selectionnee = &joueur_courant->pieces[piece - 'A'];
+
         printf("\nRotation / Inversion (touches G-D-I) : ");
-        char mouvement;
-        scanf(" %c", &mouvement);
-        mouvement = toupper(mouvement);
-*/
+        char mouvement[BUFFER];
+        fgets(mouvement, BUFFER, stdin);
+        int i;
+        for (i = 0; i < strlen(mouvement); i++)
+        {
+
+        }
 
         printf("\nPositionnez la piece dans la grille (ex : A 15): ");
         t_coord pos_piece_dans_plateau;
@@ -64,18 +72,18 @@ int main()
         pos_piece_dans_plateau.x = lettre_col - 'A';
 
         scanf(" %d", &pos_piece_dans_plateau.y);
+        getchar();
         pos_piece_dans_plateau.y--;
 
-        if (peut_poser_piece_dans_plateau(&plateau, piece_selectionnee, &pos_piece_dans_plateau, joueur_courant->premier_coup))
+        if (peut_poser_piece_dans_plateau(&plateau, joueur_courant->piece_selectionnee, &pos_piece_dans_plateau, joueur_courant->premier_coup))
         {
-            poser_piece(&plateau, piece_selectionnee, &pos_piece_dans_plateau);
+            poser_piece(&plateau, joueur_courant->piece_selectionnee, &pos_piece_dans_plateau);
             joueur_courant->premier_coup = 0;
             joueur_courant->piece_deja_posee[piece - 'A'] = 1;
         }
 
         tour++;
     } while (!fin_jeu);
-
 
     /*
     t_coord coord1 = {0, 0};

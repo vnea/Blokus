@@ -35,8 +35,10 @@
 		<Unit filename="include/affichage.h" />
 		<Unit filename="include/bloc.h" />
 		<Unit filename="include/console.h" />
+		<Unit filename="include/coord.h" />
+		<Unit filename="include/jeu.h" />
+		<Unit filename="include/joueur.h" />
 		<Unit filename="include/piece.h" />
-		<Unit filename="include/pieces_loader.h" />
 		<Unit filename="include/plateau.h" />
 		<Unit filename="ressources/pieces/A.txt" />
 		<Unit filename="ressources/pieces/B.txt" />
@@ -68,13 +70,19 @@
 		<Unit filename="src/console.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/coord.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/jeu.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/joueur.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/main.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/piece.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/pieces_loader.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/plateau.c">
