@@ -212,6 +212,7 @@ void poser_piece(t_plateau *plateau, t_piece *piece, t_coord *coord)
 
 void afficher_plateau(t_plateau *plateau)
 {
+    printf("Plateau de jeu :\n");
     printf("   ");
 
     char lettre;

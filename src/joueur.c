@@ -162,6 +162,7 @@ void poser_toutes_les_pieces_dans_plateau_selection_piece(t_joueur *joueur)
 
 void afficher_pieces_joueur(t_joueur *joueur)
 {
+    printf("Vos pieces :\n");
     int ligne;
     for (ligne = 0; ligne < NB_LIGNES_PLATEAU_JOUEUR; ligne++)
     {
@@ -189,4 +190,11 @@ void afficher_pieces_joueur(t_joueur *joueur)
         }
         printf("|\n");
     }
+}
+
+void afficher_piece_selectionnee_joueur(t_joueur *joueur)
+{
+    printf("Piece selectionnee :\n");
+
+
 }
