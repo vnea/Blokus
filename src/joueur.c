@@ -30,6 +30,16 @@ void initialiser_joueur(t_joueur *joueur, char pseudo[TAILLE_PSEUDO_MAX], t_piec
 
     joueur->piece_selectionnee = NULL;
     poser_toutes_les_pieces_dans_plateau_selection_piece(joueur);
+
+    int ligne;
+    for (ligne = 0; ligne < NB_LIGNES_PLATEAU_PIECE; ligne++)
+    {
+        int colonne;
+        for (colonne = 0; colonne  < NB_COLONNES_PLATEAU_PIECE; colonne++)
+        {
+            joueur->plateau_piece_selectionnee[ligne][colonne] = NULL;
+        }
+    }
 }
 
 int peut_encore_jouer(t_joueur *joueur, t_plateau *plateau)
@@ -73,12 +83,12 @@ void poser_piece_dans_plateau_selection_piece(t_joueur *joueur, t_piece *piece, 
     int num_bloc;
     for (num_bloc = 0; num_bloc < piece->nb_blocs; num_bloc++)
     {
-        t_coord coord_piece_dans_plateau_selection_piece =
+        t_coord coord_piece_dans_plateau_selection_pieces =
         {
             piece->blocs[num_bloc].coord.x - bloc_plus_haut_gauche->coord.x + coord->x,
             piece->blocs[num_bloc].coord.y - bloc_plus_haut_gauche->coord.y + coord->y
         };
-        joueur->plateau_selection_piece[coord_piece_dans_plateau_selection_piece.y][coord_piece_dans_plateau_selection_piece.x] = &piece->blocs[num_bloc];
+        joueur->plateau_selection_pieces[coord_piece_dans_plateau_selection_pieces.y][coord_piece_dans_plateau_selection_pieces.x] = &piece->blocs[num_bloc];
     }
 }
 
@@ -91,7 +101,7 @@ void poser_toutes_les_pieces_dans_plateau_selection_piece(t_joueur *joueur)
         int colonne;
         for (colonne = 0; colonne < NB_COLONNES_PLATEAU_JOUEUR; colonne++)
         {
-            joueur->plateau_selection_piece[ligne][colonne] = NULL;
+            joueur->plateau_selection_pieces[ligne][colonne] = NULL;
         }
     }
 
@@ -170,7 +180,7 @@ void afficher_pieces_joueur(t_joueur *joueur)
         for (colonne = 0; colonne < NB_COLONNES_PLATEAU_JOUEUR; colonne++)
         {
             printf("|");
-            t_bloc *bloc_courant = joueur->plateau_selection_piece[ligne][colonne];
+            t_bloc *bloc_courant = joueur->plateau_selection_pieces[ligne][colonne];
             if (bloc_courant)
             {
                 t_piece *piece_du_bloc = bloc_courant->piece;
@@ -192,9 +202,42 @@ void afficher_pieces_joueur(t_joueur *joueur)
     }
 }
 
+void poser_piece_dans_plateau_piece_selectionne(t_joueur *joueur, t_piece *piece)
+{
+    t_bloc *bloc_plus_haut_gauche = trouver_bloc_plus_haut_gauche_piece(piece);
+
+    int num_bloc;
+    for (num_bloc = 0; num_bloc < piece->nb_blocs; num_bloc++)
+    {
+        t_coord coord_piece_dans_plateau_piece_selectionnee =
+        {
+            piece->blocs[num_bloc].coord.x - bloc_plus_haut_gauche->coord.x + 4,
+            piece->blocs[num_bloc].coord.y - bloc_plus_haut_gauche->coord.y + 4
+        };
+        joueur->plateau_piece_selectionnee[coord_piece_dans_plateau_piece_selectionnee.y][coord_piece_dans_plateau_piece_selectionnee.x] = &piece->blocs[num_bloc];
+    }
+}
+
 void afficher_piece_selectionnee_joueur(t_joueur *joueur)
 {
     printf("Piece selectionnee :\n");
-
-
+    int ligne;
+    for (ligne = 0; ligne < NB_LIGNES_PLATEAU_PIECE; ligne++)
+    {
+        int colonne;
+        for (colonne = 0; colonne < NB_COLONNES_PLATEAU_PIECE; colonne++)
+        {
+            printf("|");
+            t_bloc *bloc_courant = joueur->plateau_piece_selectionnee[ligne][colonne];
+            if (bloc_courant)
+            {
+                print_char_couleur(bloc_courant->piece->symbole, bloc_courant->piece->couleur);
+            }
+            else
+            {
+                printf(" ");
+            }
+        }
+        printf("|\n");
+    }
 }

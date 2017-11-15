@@ -42,10 +42,12 @@ int main()
     {
         t_joueur *joueur_courant = &joueurs[tour % 2];
 
-        system("cls");
+        gotoxy(0, 0);
         afficher_plateau(&plateau);
         printf("\n");
         afficher_pieces_joueur(joueur_courant);
+        printf("\n");
+        afficher_piece_selectionnee_joueur(joueur_courant);
 
         printf("\n%s, a vous de jouer !\n", joueur_courant->pseudo);
         printf("Choisissez la piece a poser : ");
@@ -55,6 +57,10 @@ int main()
         piece = toupper(piece);
 
         joueur_courant->piece_selectionnee = &joueur_courant->pieces[piece - 'A'];
+        poser_piece_dans_plateau_piece_selectionne(joueur_courant, joueur_courant->piece_selectionnee);
+        gotoxy(0, 37);
+        afficher_piece_selectionnee_joueur(joueur_courant);
+
 
         printf("\nRotation / Inversion (touches G-D-I) : ");
         char mouvement[BUFFER];
@@ -80,6 +86,7 @@ int main()
             poser_piece(&plateau, joueur_courant->piece_selectionnee, &pos_piece_dans_plateau);
             joueur_courant->premier_coup = 0;
             joueur_courant->piece_deja_posee[piece - 'A'] = 1;
+            joueur_courant->piece_selectionnee = NULL;
         }
 
         tour++;
