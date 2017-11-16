@@ -31,88 +31,127 @@ int main()
     t_plateau plateau;
     initialiser_plateau(&plateau);
 
-    //afficher_pieces_joueur(&joueurs[1]);
-
-    //afficher_pieces_joueur(&joueurs[2]);
-    //afficher_pieces_joueur(&joueurs[3]);
-
     int tour = 0;
     int fin_jeu = 0;
     do
     {
         t_joueur *joueur_courant = &joueurs[tour % 2];
 
-        gotoxy(0, 0);
         afficher_plateau(&plateau);
         printf("\n");
         afficher_pieces_joueur(joueur_courant);
         printf("\n");
         afficher_piece_selectionnee_joueur(joueur_courant);
 
-        printf("\n%s, a vous de jouer !\n", joueur_courant->pseudo);
-        printf("Choisissez la piece a poser : ");
         char piece;
-        scanf("%c", &piece);
-        getchar();
-        piece = toupper(piece);
+        int ok;
+        SELECTION_PIECE:
+        do
+        {
+            gotoxy(0, 28);
+            for (ok = 0 ; ok < 500; ok++)
+            {
+                printf("       ");
+            }
+            gotoxy(0, 28);
 
-        joueur_courant->piece_selectionnee = &joueur_courant->pieces[piece - 'A'];
-        poser_piece_dans_plateau_piece_selectionne(joueur_courant, joueur_courant->piece_selectionnee);
-        gotoxy(0, 37);
+            printf("\n%s, a vous de jouer !\n", joueur_courant->pseudo);
+            printf("Choisissez la piece a poser : ");
+            scanf("%c", &piece);
+        } while (piece < 'A' || piece > 'T' || joueur_courant->piece_deja_posee[piece - 'A']);
+
+        copier_piece(&joueur_courant->pieces[piece - 'A'], &joueur_courant->piece_selectionnee);
+        joueur_courant->piece_a_ete_selectionnee = 1;
+
         afficher_piece_selectionnee_joueur(joueur_courant);
 
+        SELECTION_ROTATION_INVERSION:
+        gotoxy(0, 28);
+        for (ok = 0 ; ok < 500; ok++)
+        {
+            printf("       ");
+        }
+        gotoxy(0, 28);
 
-        printf("\nRotation / Inversion (touches G-D-I) : ");
+        printf("\nRotation / Inversion (touches G-D-I et * pour retour) : ");
         char mouvement[BUFFER];
+        fflush(stdin);
         fgets(mouvement, BUFFER, stdin);
         int i;
         for (i = 0; i < strlen(mouvement); i++)
         {
-
+            if (mouvement[i] == 'G')
+            {
+                rotation_gauche_piece(&joueur_courant->piece_selectionnee);
+            }
+            else if (mouvement[i] == 'D')
+            {
+                rotation_droite_piece(&joueur_courant->piece_selectionnee);
+            }
+            else if (mouvement[i] == 'I')
+            {
+                inverser_piece(&joueur_courant->piece_selectionnee);
+            }
+            else if (mouvement[i] == '*')
+            {
+                afficher_piece_selectionnee_joueur(joueur_courant);
+                goto SELECTION_PIECE;
+            }
         }
 
-        printf("\nPositionnez la piece dans la grille (ex : A 15): ");
+        afficher_piece_selectionnee_joueur(joueur_courant);
+
+        int peut_poser_piece;
         t_coord pos_piece_dans_plateau;
-        char lettre_col;
-        scanf(" %c", &lettre_col);
-        pos_piece_dans_plateau.x = lettre_col - 'A';
-
-        scanf(" %d", &pos_piece_dans_plateau.y);
-        getchar();
-        pos_piece_dans_plateau.y--;
-
-        if (peut_poser_piece_dans_plateau(&plateau, joueur_courant->piece_selectionnee, &pos_piece_dans_plateau, joueur_courant->premier_coup))
+        do
         {
-            poser_piece(&plateau, joueur_courant->piece_selectionnee, &pos_piece_dans_plateau);
-            joueur_courant->premier_coup = 0;
-            joueur_courant->piece_deja_posee[piece - 'A'] = 1;
-            joueur_courant->piece_selectionnee = NULL;
+            gotoxy(0, 28);
+            for (ok = 0 ; ok < 500; ok++)
+            {
+                printf("       ");
+            }
+            gotoxy(0, 28);
+
+            printf("\nPositionnez la piece dans la grille (ex : A 15), touche * pour retour: ");
+            char lettre_col;
+            scanf(" %c", &lettre_col);
+            if (lettre_col == '*')
+            {
+                goto SELECTION_ROTATION_INVERSION;
+            }
+
+            pos_piece_dans_plateau.x = lettre_col - 'A';
+
+            scanf(" %d", &pos_piece_dans_plateau.y);
+            getchar();
+            pos_piece_dans_plateau.y--;
+            peut_poser_piece = peut_poser_piece_dans_plateau(&plateau, &joueur_courant->piece_selectionnee, &pos_piece_dans_plateau, joueur_courant->premier_coup);
+        } while (!peut_poser_piece);
+
+        t_piece *piece_originale = &joueur_courant->pieces[piece - 'A'];
+        for (i = 0; i < strlen(mouvement); i++)
+        {
+            if (mouvement[i] == 'G')
+            {
+                rotation_gauche_piece(piece_originale);
+            }
+            else if (mouvement[i] == 'D')
+            {
+                rotation_droite_piece(piece_originale);
+            }
+            else if (mouvement[i] == 'I')
+            {
+                inverser_piece(piece_originale);
+            }
         }
 
+        poser_piece_dans_plateau(&plateau, piece_originale, &pos_piece_dans_plateau);
+        joueur_courant->premier_coup = 0;
+        joueur_courant->piece_deja_posee[piece - 'A'] = 1;
+
+        joueur_courant->piece_a_ete_selectionnee = 0;
         tour++;
     } while (!fin_jeu);
-
-    /*
-    t_coord coord1 = {0, 0};
-    if (peut_poser_piece_dans_plateau(&plateau, &pieces[0], &coord1, 1))
-    {
-        poser_piece(&plateau, &pieces[0], &coord1);
-    }
-
-
-    printf("\n");
-    afficher_plateau(&plateau);
-
-
-    t_coord coord2 = {NB_COLONNES  - 1, 0};
-    if (peut_poser_piece_dans_plateau(&plateau, &pieces['G' - 'A'], &coord2, 1))
-    {
-        poser_piece(&plateau, &pieces['G' - 'A'], &coord2);
-    }
-
-    printf("\n");
-    afficher_plateau(&plateau);
-    */
 
     return 0;
 }

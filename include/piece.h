@@ -19,6 +19,7 @@ typedef struct piece
 } t_piece;
 
 void initialiser_piece(t_piece *piece, char symbole, t_bloc blocs[NB_BLOCS_MAX], int nb_blocs);
+void copier_piece(t_piece *source, t_piece *destination);
 void charger_pieces(t_piece pieces[NB_PIECES_MAX]);
 
 void rotation_gauche_piece(t_piece *piece);

@@ -19,6 +19,21 @@ void initialiser_piece(t_piece *piece, char symbole, t_bloc blocs[NB_BLOCS_MAX],
     }
 }
 
+void copier_piece(t_piece *source, t_piece *destination)
+{
+    destination->symbole = source->symbole;
+    destination->couleur = source->couleur;
+
+    destination->nb_blocs = source->nb_blocs;
+    int num_bloc;
+    for (num_bloc = 0; num_bloc < source->nb_blocs; num_bloc++)
+    {
+        destination->blocs[num_bloc].coord = source->blocs[num_bloc].coord;
+        destination->blocs[num_bloc].est_un_angle = source->blocs[num_bloc].est_un_angle;
+        destination->blocs[num_bloc].piece = destination;
+    }
+}
+
 void charger_pieces(t_piece pieces[NB_PIECES_MAX])
 {
     char* chemin_vers_pieces[NB_PIECES_MAX] =
@@ -115,8 +130,8 @@ t_bloc* trouver_bloc_plus_haut_gauche_piece(t_piece *piece)
     for (num_bloc = 1; num_bloc < piece->nb_blocs; num_bloc++)
     {
         t_bloc *bloc_courant = &piece->blocs[num_bloc];
-        if (bloc_courant->coord.y < bloc_plus_haut_gauche->coord.y &&
-            bloc_courant->coord.x < bloc_plus_haut_gauche->coord.x)
+        if (bloc_courant->coord.y <= bloc_plus_haut_gauche->coord.y &&
+            bloc_courant->coord.x <= bloc_plus_haut_gauche->coord.x)
         {
             bloc_plus_haut_gauche = bloc_courant;
         }

@@ -120,7 +120,7 @@ int bloc_angle_d_une_piece_est_valide(t_plateau *plateau, t_piece *piece, t_coor
             int pos_x_bloc_droite = coord_piece_dans_plateau.x + 1;
 
             // Bloc haut-gauche
-            if (pos_x_bloc_gauche > 0 && pos_y_bloc_haut > 0)
+            if (pos_x_bloc_gauche >= 0 && pos_y_bloc_haut >= 0)
             {
                 t_bloc *bloc_haut_gauche = plateau->damier[pos_y_bloc_haut][pos_x_bloc_gauche];
                 if (bloc_haut_gauche && bloc_haut_gauche->piece->couleur == piece->couleur)
@@ -130,7 +130,7 @@ int bloc_angle_d_une_piece_est_valide(t_plateau *plateau, t_piece *piece, t_coor
             }
 
             // Bloc haut-droite
-            if (pos_x_bloc_droite < NB_COLONNES && pos_y_bloc_haut > 0)
+            if (pos_x_bloc_droite < NB_COLONNES && pos_y_bloc_haut >= 0)
             {
                 t_bloc *bloc_haut_droite = plateau->damier[pos_y_bloc_haut][pos_x_bloc_droite];
                 if (bloc_haut_droite && bloc_haut_droite->piece->couleur == piece->couleur)
@@ -140,7 +140,7 @@ int bloc_angle_d_une_piece_est_valide(t_plateau *plateau, t_piece *piece, t_coor
             }
 
             // Bloc bas-gauche
-            if (pos_x_bloc_gauche > 0 && pos_y_bloc_bas < NB_LIGNES)
+            if (pos_x_bloc_gauche >= 0 && pos_y_bloc_bas < NB_LIGNES)
             {
                 t_bloc *bloc_bas_gauche = plateau->damier[pos_y_bloc_bas][pos_x_bloc_gauche];
                 if (bloc_bas_gauche && bloc_bas_gauche->piece->couleur == piece->couleur)
@@ -182,8 +182,7 @@ int bloc_angle_d_une_piece_est_dans_un_coin(t_plateau *plateau, t_piece *piece, 
             if ((coord_piece_dans_plateau.x == 0 && coord_piece_dans_plateau.y == 0) || // Coin Gauche Haut
                 (coord_piece_dans_plateau.x == 0 && coord_piece_dans_plateau.y == NB_LIGNES - 1) || // Coin Gauche Bas
                 (coord_piece_dans_plateau.x == NB_COLONNES - 1 && coord_piece_dans_plateau.y == 0) || // Coin Droite Haut
-                (coord_piece_dans_plateau.x == NB_COLONNES - 1 && coord_piece_dans_plateau.y == NB_LIGNES - 1) // Coin Droite Bas
-            )
+                (coord_piece_dans_plateau.x == NB_COLONNES - 1 && coord_piece_dans_plateau.y == NB_LIGNES - 1)) // Coin Droite Bas
             {
                 return 1;
             }
@@ -193,7 +192,7 @@ int bloc_angle_d_une_piece_est_dans_un_coin(t_plateau *plateau, t_piece *piece, 
     return 0;
 }
 
-void poser_piece(t_plateau *plateau, t_piece *piece, t_coord *coord)
+void poser_piece_dans_plateau(t_plateau *plateau, t_piece *piece, t_coord *coord)
 {
     t_bloc *bloc_plus_haut_gauche = trouver_bloc_plus_haut_gauche_piece(piece);
 
@@ -212,6 +211,7 @@ void poser_piece(t_plateau *plateau, t_piece *piece, t_coord *coord)
 
 void afficher_plateau(t_plateau *plateau)
 {
+    gotoxy(0, 0);
     printf("Plateau de jeu :\n");
     printf("   ");
 
