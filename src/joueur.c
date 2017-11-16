@@ -24,7 +24,7 @@ void initialiser_joueur(t_joueur *joueur, char pseudo[TAILLE_PSEUDO_MAX], t_piec
     for (ligne = 0; ligne < NB_LIGNES_PLATEAU_PIECE; ligne++)
     {
         int colonne;
-        for (colonne = 0; colonne  < NB_COLONNES_PLATEAU_PIECE; colonne++)
+        for (colonne = 0; colonne < NB_COLONNES_PLATEAU_PIECE; colonne++)
         {
             joueur->plateau_piece_selectionnee[ligne][colonne] = NULL;
         }
@@ -220,7 +220,10 @@ void poser_piece_dans_plateau_piece_selectionne(t_joueur *joueur, t_piece *piece
 
 void afficher_piece_selectionnee_joueur(t_joueur *joueur)
 {
-    poser_piece_dans_plateau_piece_selectionne(joueur, &joueur->piece_selectionnee);
+    if (joueur->piece_a_ete_selectionnee)
+    {
+        poser_piece_dans_plateau_piece_selectionne(joueur, &joueur->piece_selectionnee);
+    }
     int ligne;
     for (ligne = 0; ligne < NB_LIGNES_PLATEAU_PIECE; ligne++)
     {

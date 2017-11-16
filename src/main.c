@@ -24,8 +24,8 @@ int main()
     t_joueur joueurs[4];
     initialiser_joueur(&joueurs[0], "J1", pieces, COULEUR_BLEU);
     initialiser_joueur(&joueurs[1], "J2", pieces, COULEUR_ROUGE);
-    //initialiser_joueur(&joueurs[2], "J3", pieces, COULEUR_JAUNE);
-    //initialiser_joueur(&joueurs[3], "J4", pieces, COULEUR_VERT);
+    initialiser_joueur(&joueurs[2], "J3", pieces, COULEUR_JAUNE);
+    initialiser_joueur(&joueurs[3], "J4", pieces, COULEUR_VERT);
 
     // Création plateau
     t_plateau plateau;
@@ -35,7 +35,7 @@ int main()
     int fin_jeu = 0;
     do
     {
-        t_joueur *joueur_courant = &joueurs[tour % 2];
+        t_joueur *joueur_courant = &joueurs[tour % 4];
 
         afficher_plateau(&plateau);
         printf("\n");
@@ -60,7 +60,8 @@ int main()
             scanf("%c", &piece);
         } while (piece < 'A' || piece > 'T' || joueur_courant->piece_deja_posee[piece - 'A']);
 
-        copier_piece(&joueur_courant->pieces[piece - 'A'], &joueur_courant->piece_selectionnee);
+        t_piece *piece_originale = &joueur_courant->pieces[piece - 'A'];
+        copier_piece(piece_originale, &joueur_courant->piece_selectionnee);
         joueur_courant->piece_a_ete_selectionnee = 1;
 
         afficher_piece_selectionnee_joueur(joueur_courant);
@@ -82,14 +83,17 @@ int main()
         {
             if (mouvement[i] == 'G')
             {
+                rotation_gauche_piece(piece_originale);
                 rotation_gauche_piece(&joueur_courant->piece_selectionnee);
             }
             else if (mouvement[i] == 'D')
             {
+                rotation_droite_piece(piece_originale);
                 rotation_droite_piece(&joueur_courant->piece_selectionnee);
             }
             else if (mouvement[i] == 'I')
             {
+                inverser_piece(piece_originale);
                 inverser_piece(&joueur_courant->piece_selectionnee);
             }
             else if (mouvement[i] == '*')
@@ -127,23 +131,6 @@ int main()
             pos_piece_dans_plateau.y--;
             peut_poser_piece = peut_poser_piece_dans_plateau(&plateau, &joueur_courant->piece_selectionnee, &pos_piece_dans_plateau, joueur_courant->premier_coup);
         } while (!peut_poser_piece);
-
-        t_piece *piece_originale = &joueur_courant->pieces[piece - 'A'];
-        for (i = 0; i < strlen(mouvement); i++)
-        {
-            if (mouvement[i] == 'G')
-            {
-                rotation_gauche_piece(piece_originale);
-            }
-            else if (mouvement[i] == 'D')
-            {
-                rotation_droite_piece(piece_originale);
-            }
-            else if (mouvement[i] == 'I')
-            {
-                inverser_piece(piece_originale);
-            }
-        }
 
         poser_piece_dans_plateau(&plateau, piece_originale, &pos_piece_dans_plateau);
         joueur_courant->premier_coup = 0;
