@@ -224,6 +224,7 @@ void afficher_piece_selectionnee_joueur(t_joueur *joueur)
     {
         poser_piece_dans_plateau_piece_selectionne(joueur, &joueur->piece_selectionnee);
     }
+
     int ligne;
     for (ligne = 0; ligne < NB_LIGNES_PLATEAU_PIECE; ligne++)
     {

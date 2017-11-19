@@ -58,7 +58,7 @@ int main()
             printf("\n%s, a vous de jouer !\n", joueur_courant->pseudo);
             printf("Choisissez la piece a poser : ");
             scanf("%c", &piece);
-        } while (piece < 'A' || piece > 'T' || joueur_courant->piece_deja_posee[piece - 'A']);
+        } while (piece < 'A' || piece > 'U' || joueur_courant->piece_deja_posee[piece - 'A']);
 
         t_piece *piece_originale = &joueur_courant->pieces[piece - 'A'];
         copier_piece(piece_originale, &joueur_courant->piece_selectionnee);
