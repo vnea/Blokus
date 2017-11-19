@@ -14,6 +14,8 @@
 
 #define BUFFER 64
 
+void effacer_instructions();
+
 int main()
 {
     // Création pieces
@@ -44,17 +46,10 @@ int main()
         afficher_piece_selectionnee_joueur(joueur_courant);
 
         char piece;
-        int ok;
         SELECTION_PIECE:
         do
         {
-            gotoxy(0, 28);
-            for (ok = 0 ; ok < 500; ok++)
-            {
-                printf("       ");
-            }
-            gotoxy(0, 28);
-
+            effacer_instructions();
             printf("\n%s, a vous de jouer !\n", joueur_courant->pseudo);
             printf("Choisissez la piece a poser : ");
             scanf("%c", &piece);
@@ -67,12 +62,7 @@ int main()
         afficher_piece_selectionnee_joueur(joueur_courant);
 
         SELECTION_ROTATION_INVERSION:
-        gotoxy(0, 28);
-        for (ok = 0 ; ok < 500; ok++)
-        {
-            printf("       ");
-        }
-        gotoxy(0, 28);
+        effacer_instructions();
 
         printf("\nRotation / Inversion (touches G-D-I et * pour retour) : ");
         char mouvement[BUFFER];
@@ -109,12 +99,7 @@ int main()
         t_coord pos_piece_dans_plateau;
         do
         {
-            gotoxy(0, 28);
-            for (ok = 0 ; ok < 500; ok++)
-            {
-                printf("       ");
-            }
-            gotoxy(0, 28);
+            effacer_instructions();
 
             printf("\nPositionnez la piece dans la grille (ex : A 15), touche * pour retour: ");
             char lettre_col;
@@ -141,4 +126,15 @@ int main()
     } while (!fin_jeu);
 
     return 0;
+}
+
+void effacer_instructions()
+{
+    gotoxy(0, 28);
+    int i;
+    for (i = 0 ; i < 1000; i++)
+    {
+        printf(" ");
+    }
+    gotoxy(0, 28);
 }
