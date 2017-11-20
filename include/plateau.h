@@ -1,14 +1,14 @@
 #ifndef PLATEAU_H_INCLUDED
 #define PLATEAU_H_INCLUDED
 
-#define NB_LIGNES 20
-#define NB_COLONNES 20
+#define NB_LIGNES_PLATEAU 8
+#define NB_COLONNES_PLATEAU 8
 
 #include "piece.h"
 
 typedef struct plateau
 {
-    t_bloc* damier[NB_LIGNES][NB_COLONNES];
+    t_bloc* damier[NB_LIGNES_PLATEAU][NB_COLONNES_PLATEAU];
 } t_plateau;
 
 void initialiser_plateau(t_plateau *plateau);

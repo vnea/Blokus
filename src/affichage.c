@@ -3,15 +3,24 @@
 
 #include "../include/affichage.h"
 
-void gotoxy(int x, int y)
+void gotoligcol(int lig, int col)
 {
-    COORD coord = {x, y};
+    COORD coord = {lig, col};
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
 void print_char_couleur(char c, int couleur)
 {
-    SetConsoleTextAttribute (GetStdHandle(STD_OUTPUT_HANDLE), couleur << 4);
+    changer_print_couleur(couleur);
     printf("%c", c);
+    reset_print_couleur();
+}
+
+void changer_print_couleur(int couleur)
+{
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), couleur << 4);
+}
+void reset_print_couleur()
+{
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x07);
 }

@@ -6,10 +6,10 @@
 void initialiser_plateau(t_plateau *plateau)
 {
     int ligne;
-    for (ligne = 0; ligne < NB_LIGNES; ligne++)
+    for (ligne = 0; ligne < NB_LIGNES_PLATEAU; ligne++)
     {
         int colonne;
-        for (colonne = 0; colonne < NB_COLONNES; colonne++)
+        for (colonne = 0; colonne < NB_COLONNES_PLATEAU; colonne++)
         {
             plateau->damier[ligne][colonne] = NULL;
         }
@@ -31,8 +31,8 @@ int peut_poser_piece_dans_plateau(t_plateau *plateau, t_piece *piece, t_coord *c
         };
 
         // Verifier si le bloc est bien dans le plateau
-        if (coord_piece_dans_plateau.x < 0 || coord_piece_dans_plateau.x >= NB_COLONNES ||
-            coord_piece_dans_plateau.y < 0 || coord_piece_dans_plateau.y >= NB_LIGNES)
+        if (coord_piece_dans_plateau.x < 0 || coord_piece_dans_plateau.x >= NB_COLONNES_PLATEAU ||
+            coord_piece_dans_plateau.y < 0 || coord_piece_dans_plateau.y >= NB_LIGNES_PLATEAU)
         {
            return 0;
         }
@@ -47,7 +47,7 @@ int peut_poser_piece_dans_plateau(t_plateau *plateau, t_piece *piece, t_coord *c
 
         // Bloc haut
         int pos_y_bloc_haut = coord_piece_dans_plateau.y - 1;
-        if (pos_y_bloc_haut > 0)
+        if (pos_y_bloc_haut >= 0)
         {
             t_bloc *bloc_haut = plateau->damier[pos_y_bloc_haut][coord_piece_dans_plateau.x];
             if (bloc_haut && bloc_haut->piece->couleur == piece->couleur)
@@ -58,7 +58,7 @@ int peut_poser_piece_dans_plateau(t_plateau *plateau, t_piece *piece, t_coord *c
 
         // Bloc bas
         int pos_y_bloc_bas = coord_piece_dans_plateau.y + 1;
-        if (pos_y_bloc_bas < NB_LIGNES)
+        if (pos_y_bloc_bas < NB_LIGNES_PLATEAU)
         {
             t_bloc *bloc_bas = plateau->damier[pos_y_bloc_bas][coord_piece_dans_plateau.x];
             if (bloc_bas && bloc_bas->piece->couleur == piece->couleur)
@@ -69,7 +69,7 @@ int peut_poser_piece_dans_plateau(t_plateau *plateau, t_piece *piece, t_coord *c
 
         // Bloc gauche
         int pos_x_bloc_gauche = coord_piece_dans_plateau.x - 1;
-        if (pos_x_bloc_gauche > 0)
+        if (pos_x_bloc_gauche >= 0)
         {
             t_bloc *bloc_gauche = plateau->damier[coord_piece_dans_plateau.y][pos_x_bloc_gauche];
             if (bloc_gauche && bloc_gauche->piece->couleur == piece->couleur)
@@ -80,7 +80,7 @@ int peut_poser_piece_dans_plateau(t_plateau *plateau, t_piece *piece, t_coord *c
 
         // Bloc droite
         int pos_x_bloc_droite = coord_piece_dans_plateau.x + 1;
-        if (pos_x_bloc_droite < NB_COLONNES)
+        if (pos_x_bloc_droite < NB_COLONNES_PLATEAU)
         {
             t_bloc *bloc_droite = plateau->damier[coord_piece_dans_plateau.y][pos_x_bloc_droite];
             if (bloc_droite && bloc_droite->piece->couleur == piece->couleur)
@@ -130,7 +130,7 @@ int bloc_angle_d_une_piece_est_valide(t_plateau *plateau, t_piece *piece, t_coor
             }
 
             // Bloc haut-droite
-            if (pos_x_bloc_droite < NB_COLONNES && pos_y_bloc_haut >= 0)
+            if (pos_x_bloc_droite < NB_COLONNES_PLATEAU && pos_y_bloc_haut >= 0)
             {
                 t_bloc *bloc_haut_droite = plateau->damier[pos_y_bloc_haut][pos_x_bloc_droite];
                 if (bloc_haut_droite && bloc_haut_droite->piece->couleur == piece->couleur)
@@ -140,7 +140,7 @@ int bloc_angle_d_une_piece_est_valide(t_plateau *plateau, t_piece *piece, t_coor
             }
 
             // Bloc bas-gauche
-            if (pos_x_bloc_gauche >= 0 && pos_y_bloc_bas < NB_LIGNES)
+            if (pos_x_bloc_gauche >= 0 && pos_y_bloc_bas < NB_LIGNES_PLATEAU)
             {
                 t_bloc *bloc_bas_gauche = plateau->damier[pos_y_bloc_bas][pos_x_bloc_gauche];
                 if (bloc_bas_gauche && bloc_bas_gauche->piece->couleur == piece->couleur)
@@ -150,7 +150,7 @@ int bloc_angle_d_une_piece_est_valide(t_plateau *plateau, t_piece *piece, t_coor
             }
 
             // Bloc bas-droite
-            if (pos_x_bloc_droite < NB_COLONNES && pos_y_bloc_bas < NB_LIGNES)
+            if (pos_x_bloc_droite < NB_COLONNES_PLATEAU && pos_y_bloc_bas < NB_LIGNES_PLATEAU)
             {
                 t_bloc *bloc_haut_droite = plateau->damier[pos_y_bloc_bas][pos_x_bloc_droite];
                 if (bloc_haut_droite && bloc_haut_droite->piece->couleur == piece->couleur)
@@ -180,9 +180,9 @@ int bloc_angle_d_une_piece_est_dans_un_coin(t_plateau *plateau, t_piece *piece, 
             };
 
             if ((coord_piece_dans_plateau.x == 0 && coord_piece_dans_plateau.y == 0) || // Coin Gauche Haut
-                (coord_piece_dans_plateau.x == 0 && coord_piece_dans_plateau.y == NB_LIGNES - 1) || // Coin Gauche Bas
-                (coord_piece_dans_plateau.x == NB_COLONNES - 1 && coord_piece_dans_plateau.y == 0) || // Coin Droite Haut
-                (coord_piece_dans_plateau.x == NB_COLONNES - 1 && coord_piece_dans_plateau.y == NB_LIGNES - 1)) // Coin Droite Bas
+                (coord_piece_dans_plateau.x == 0 && coord_piece_dans_plateau.y == NB_LIGNES_PLATEAU - 1) || // Coin Gauche Bas
+                (coord_piece_dans_plateau.x == NB_COLONNES_PLATEAU - 1 && coord_piece_dans_plateau.y == 0) || // Coin Droite Haut
+                (coord_piece_dans_plateau.x == NB_COLONNES_PLATEAU - 1 && coord_piece_dans_plateau.y == NB_LIGNES_PLATEAU - 1)) // Coin Droite Bas
             {
                 return 1;
             }
@@ -211,23 +211,25 @@ void poser_piece_dans_plateau(t_plateau *plateau, t_piece *piece, t_coord *coord
 
 void afficher_plateau(t_plateau *plateau)
 {
-    gotoxy(0, 0);
+    gotoligcol(0, 0);
     printf("Plateau de jeu :\n");
     printf("   ");
 
-    char lettre;
-    for (lettre = 'A'; lettre <= 'T'; lettre++)
+    char lettre = 'A';
+    int nb_lettres;
+    for (nb_lettres = 0; nb_lettres < NB_COLONNES_PLATEAU; nb_lettres++)
     {
         printf("%c ", lettre);
+        lettre++;
     }
 
     int ligne;
-    for (ligne = 0; ligne < NB_LIGNES; ligne++)
+    for (ligne = 0; ligne < NB_LIGNES_PLATEAU; ligne++)
     {
         printf("\n%2d", ligne + 1);
 
         int colonne;
-        for (colonne = 0; colonne < NB_COLONNES; colonne++)
+        for (colonne = 0; colonne < NB_COLONNES_PLATEAU; colonne++)
         {
             printf("|");
             t_bloc *bloc_courant = plateau->damier[ligne][colonne];
@@ -242,5 +244,5 @@ void afficher_plateau(t_plateau *plateau)
         }
         printf("|");
     }
-    printf("\n");
+    printf("\n\n");
 }

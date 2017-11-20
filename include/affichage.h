@@ -7,7 +7,9 @@
 #define COULEUR_ROUGE 12
 #define COULEUR_JAUNE 14
 
-void gotoxy(int x, int y);
+void gotoligcol(int lig, int col);
+void changer_print_couleur(int couleur);
+void reset_print_couleur();
 void print_char_couleur(char c, int couleur);
 
 #endif // AFFICHAGE_H_INCLUDED
