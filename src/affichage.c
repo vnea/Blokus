@@ -5,7 +5,7 @@
 
 void gotoligcol(int lig, int col)
 {
-    COORD coord = {lig, col};
+    COORD coord = {col, lig};
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 

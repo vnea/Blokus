@@ -4,7 +4,7 @@
 #include "../include/affichage.h"
 #include "../include/joueur.h"
 
-void initialiser_joueur(t_joueur *joueur, char pseudo[TAILLE_PSEUDO_MAX], t_piece pieces[NB_PIECES_MAX], int couleur_pieces, int est_ia)
+void initialiser_joueur(t_joueur *joueur, char pseudo[BUFFER], t_piece pieces[NB_PIECES_MAX], int couleur_pieces, int est_ia)
 {
     strcpy(joueur->pseudo, pseudo);
     joueur->premier_coup = 1;
@@ -129,6 +129,144 @@ int nb_pieces_restantes_joueur(t_joueur *joueur)
     return nb_pieces_restantes;
 }
 
+void choisir_coup_ia(t_joueur *joueur, t_plateau *plateau, int *indice_piece, t_coord *pos_piece)
+{
+    int num_piece;
+    for (num_piece = 0; num_piece < NB_PIECES_MAX; num_piece++)
+    {
+        if (!joueur->piece_deja_posee[num_piece])
+        {
+            int ligne;
+            for (ligne = 0; ligne < NB_LIGNES_PLATEAU; ligne++)
+            {
+                int colonne;
+                for (colonne = 0; colonne < NB_COLONNES_PLATEAU; colonne++)
+                {
+                    // On travaille sur une copie de la piece pour ne pas toucher aux coord de l'originale
+                    t_piece copie_piece;
+                    copier_piece(&joueur->pieces[num_piece], &copie_piece);
+                    t_coord pos_piece_dans_plateau = {colonne, ligne};
+
+                    // Cas normal
+                    if (peut_poser_piece_dans_plateau(plateau, &copie_piece, &pos_piece_dans_plateau, joueur->premier_coup))
+                    {
+                        *indice_piece = num_piece;
+                        pos_piece->x = pos_piece_dans_plateau.x;
+                        pos_piece->y = pos_piece_dans_plateau.y;
+                        joueur->piece_selectionnee = &joueur->pieces[num_piece];
+                        return;
+                    }
+
+                    // Inversion
+                    inverser_piece(&copie_piece);
+                    if (peut_poser_piece_dans_plateau(plateau, &copie_piece, &pos_piece_dans_plateau, joueur->premier_coup))
+                    {
+                        *indice_piece = num_piece;
+                        pos_piece->x = pos_piece_dans_plateau.x;
+                        pos_piece->y = pos_piece_dans_plateau.y;
+                        joueur->piece_selectionnee = &joueur->pieces[num_piece];
+                        inverser_piece(joueur->piece_selectionnee);
+                        return;
+                    }
+
+                    // 1 rotation droite avec inversion
+                    rotation_droite_piece(&copie_piece);
+                    if (peut_poser_piece_dans_plateau(plateau, &copie_piece, &pos_piece_dans_plateau, joueur->premier_coup))
+                    {
+                        *indice_piece = num_piece;
+                        pos_piece->x = pos_piece_dans_plateau.x;
+                        pos_piece->y = pos_piece_dans_plateau.y;
+                        joueur->piece_selectionnee = &joueur->pieces[num_piece];
+                        inverser_piece(joueur->piece_selectionnee);
+                        rotation_droite_piece(joueur->piece_selectionnee);
+                        return;
+                    }
+
+                    // 1 rotation droite normale
+                    inverser_piece(&copie_piece);
+                    if (peut_poser_piece_dans_plateau(plateau, &copie_piece, &pos_piece_dans_plateau, joueur->premier_coup))
+                    {
+                        *indice_piece = num_piece;
+                        pos_piece->x = pos_piece_dans_plateau.x;
+                        pos_piece->y = pos_piece_dans_plateau.y;
+                        joueur->piece_selectionnee = &joueur->pieces[num_piece];
+                        inverser_piece(joueur->piece_selectionnee);
+                        rotation_droite_piece(joueur->piece_selectionnee);
+                        inverser_piece(joueur->piece_selectionnee);
+                        return;
+                    }
+
+                    // 2 rotations droites normales
+                    rotation_droite_piece(&copie_piece);
+                    if (peut_poser_piece_dans_plateau(plateau, &copie_piece, &pos_piece_dans_plateau, joueur->premier_coup))
+                    {
+                        *indice_piece = num_piece;
+                        pos_piece->x = pos_piece_dans_plateau.x;
+                        pos_piece->y = pos_piece_dans_plateau.y;
+                        joueur->piece_selectionnee = &joueur->pieces[num_piece];
+                        inverser_piece(joueur->piece_selectionnee);
+                        rotation_droite_piece(joueur->piece_selectionnee);
+                        inverser_piece(joueur->piece_selectionnee);
+                        rotation_droite_piece(joueur->piece_selectionnee);
+                        return;
+                    }
+
+                    // 2 rotations droites normales avec inversion
+                    inverser_piece(&copie_piece);
+                    if (peut_poser_piece_dans_plateau(plateau, &copie_piece, &pos_piece_dans_plateau, joueur->premier_coup))
+                    {
+                        *indice_piece = num_piece;
+                        pos_piece->x = pos_piece_dans_plateau.x;
+                        pos_piece->y = pos_piece_dans_plateau.y;
+                        joueur->piece_selectionnee = &joueur->pieces[num_piece];
+                        inverser_piece(joueur->piece_selectionnee);
+                        rotation_droite_piece(joueur->piece_selectionnee);
+                        inverser_piece(joueur->piece_selectionnee);
+                        rotation_droite_piece(joueur->piece_selectionnee);
+                        inverser_piece(joueur->piece_selectionnee);
+                        return;
+                    }
+
+                    // 3 rotations droites avec inversion
+                    rotation_droite_piece(&copie_piece);
+                    if (peut_poser_piece_dans_plateau(plateau, &copie_piece, &pos_piece_dans_plateau, joueur->premier_coup))
+                    {
+                        *indice_piece = num_piece;
+                        pos_piece->x = pos_piece_dans_plateau.x;
+                        pos_piece->y = pos_piece_dans_plateau.y;
+                        joueur->piece_selectionnee = &joueur->pieces[num_piece];
+                        inverser_piece(joueur->piece_selectionnee);
+                        rotation_droite_piece(joueur->piece_selectionnee);
+                        inverser_piece(joueur->piece_selectionnee);
+                        rotation_droite_piece(joueur->piece_selectionnee);
+                        inverser_piece(joueur->piece_selectionnee);
+                        rotation_droite_piece(joueur->piece_selectionnee);
+                        return;
+                    }
+
+                    // 3 rotations droites normales
+                    inverser_piece(&copie_piece);
+                    if (peut_poser_piece_dans_plateau(plateau, &copie_piece, &pos_piece_dans_plateau, joueur->premier_coup))
+                    {
+                        *indice_piece = num_piece;
+                        pos_piece->x = pos_piece_dans_plateau.x;
+                        pos_piece->y = pos_piece_dans_plateau.y;
+                        joueur->piece_selectionnee = &joueur->pieces[num_piece];
+                        inverser_piece(joueur->piece_selectionnee);
+                        rotation_droite_piece(joueur->piece_selectionnee);
+                        inverser_piece(joueur->piece_selectionnee);
+                        rotation_droite_piece(joueur->piece_selectionnee);
+                        inverser_piece(joueur->piece_selectionnee);
+                        rotation_droite_piece(joueur->piece_selectionnee);
+                        inverser_piece(joueur->piece_selectionnee);
+                        return;
+                    }
+                }
+            }
+        }
+    }
+}
+
 void initialiser_plateau_selection_pieces(t_joueur *joueur)
 {
     // On met des blocs "vides"
@@ -228,7 +366,7 @@ void afficher_pieces_joueur(t_joueur *joueur)
     int ligne;
     for (ligne = 0; ligne < NB_LIGNES_PLATEAU_JOUEUR; ligne++)
     {
-        gotoligcol(50, ligne + 2);
+        gotoligcol(ligne + 2, 50);
         int colonne;
         for (colonne = 0; colonne < NB_COLONNES_PLATEAU_JOUEUR; colonne++)
         {
@@ -258,17 +396,41 @@ void afficher_pieces_joueur(t_joueur *joueur)
 void initialiser_plateau_piece_selectionnee(t_joueur *joueur)
 {
     int ligne;
-    for (ligne = 0; ligne < NB_LIGNES_PLATEAU_PIECE; ligne++)
+    for (ligne = 0; ligne < NB_BLOCS_MAX; ligne++)
     {
         int colonne;
-        for (colonne = 0; colonne  < NB_COLONNES_PLATEAU_PIECE; colonne++)
+        for (colonne = 0; colonne < NB_BLOCS_MAX; colonne++)
         {
             joueur->plateau_piece_selectionnee[ligne][colonne] = NULL;
         }
     }
 }
 
-void poser_piece_dans_plateau_piece_selectionnee(t_joueur *joueur, t_piece *piece)
+int peut_poser_piece_dans_plateau_piece_selectionnee(t_joueur *joueur, t_piece *piece, t_coord *pos_piece)
+{
+    t_bloc *bloc_plus_haut_gauche = trouver_bloc_plus_haut_gauche_piece(piece);
+
+    int num_bloc;
+    for (num_bloc = 0; num_bloc < piece->nb_blocs; num_bloc++)
+    {
+        t_coord coord_piece_dans_plateau_piece_selectionnee =
+        {
+            piece->blocs[num_bloc].coord.x - bloc_plus_haut_gauche->coord.x + pos_piece->x,
+            piece->blocs[num_bloc].coord.y - bloc_plus_haut_gauche->coord.y + pos_piece->y
+        };
+
+        // Verifier si le bloc est bien dans le plateau
+        if (coord_piece_dans_plateau_piece_selectionnee.x < 0 || coord_piece_dans_plateau_piece_selectionnee.x >= NB_BLOCS_MAX ||
+            coord_piece_dans_plateau_piece_selectionnee.y < 0 || coord_piece_dans_plateau_piece_selectionnee.y >= NB_BLOCS_MAX)
+        {
+           return 0;
+        }
+    }
+
+    return 1;
+}
+
+void poser_piece_dans_plateau_piece_selectionnee(t_joueur *joueur, t_piece *piece, t_coord *pos_piece)
 {
     initialiser_plateau_piece_selectionnee(joueur);
     t_bloc *bloc_plus_haut_gauche = trouver_bloc_plus_haut_gauche_piece(piece);
@@ -278,8 +440,8 @@ void poser_piece_dans_plateau_piece_selectionnee(t_joueur *joueur, t_piece *piec
     {
         t_coord coord_piece_dans_plateau_piece_selectionnee =
         {
-            piece->blocs[num_bloc].coord.x - bloc_plus_haut_gauche->coord.x + 4,
-            piece->blocs[num_bloc].coord.y - bloc_plus_haut_gauche->coord.y + 4
+            piece->blocs[num_bloc].coord.x - bloc_plus_haut_gauche->coord.x + pos_piece->x,
+            piece->blocs[num_bloc].coord.y - bloc_plus_haut_gauche->coord.y + pos_piece->y
         };
         joueur->plateau_piece_selectionnee[coord_piece_dans_plateau_piece_selectionnee.y][coord_piece_dans_plateau_piece_selectionnee.x] = &piece->blocs[num_bloc];
     }
@@ -289,15 +451,29 @@ void afficher_piece_selectionnee_joueur(t_joueur *joueur)
 {
     if (joueur->piece_selectionnee)
     {
-        poser_piece_dans_plateau_piece_selectionnee(joueur, joueur->piece_selectionnee);
+        int peut_poser = 0;
+        int ligne;
+        for (ligne = 0; !peut_poser && ligne < NB_BLOCS_MAX; ligne++)
+        {
+            int colonne;
+            for (colonne = 0; !peut_poser && colonne < NB_BLOCS_MAX; colonne++)
+            {
+                t_coord delta = {colonne, ligne};
+                peut_poser = peut_poser_piece_dans_plateau_piece_selectionnee(joueur, joueur->piece_selectionnee, &delta);
+                if (peut_poser)
+                {
+                    poser_piece_dans_plateau_piece_selectionnee(joueur, joueur->piece_selectionnee, &delta);
+                }
+            }
+        }
     }
 
     int ligne;
-    for (ligne = 0; ligne < NB_LIGNES_PLATEAU_PIECE; ligne++)
+    for (ligne = 0; ligne < NB_BLOCS_MAX; ligne++)
     {
-        gotoligcol(50, ligne + 16);
+        gotoligcol(ligne + 16, 50);
         int colonne;
-        for (colonne = 0; colonne < NB_COLONNES_PLATEAU_PIECE; colonne++)
+        for (colonne = 0; colonne < NB_BLOCS_MAX; colonne++)
         {
             printf("|");
             t_bloc *bloc_courant = joueur->plateau_piece_selectionnee[ligne][colonne];

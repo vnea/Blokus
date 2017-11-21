@@ -1,8 +1,6 @@
 #ifndef PIECE_H_INCLUDED
 #define PIECE_H_INCLUDED
 
-#include <stddef.h>
-
 #include "bloc.h"
 
 #define NB_PIECES_MAX 21

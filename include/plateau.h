@@ -1,8 +1,8 @@
 #ifndef PLATEAU_H_INCLUDED
 #define PLATEAU_H_INCLUDED
 
-#define NB_LIGNES_PLATEAU 8
-#define NB_COLONNES_PLATEAU 8
+#define NB_LIGNES_PLATEAU 20
+#define NB_COLONNES_PLATEAU 20
 
 #include "piece.h"
 

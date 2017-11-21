@@ -130,10 +130,16 @@ t_bloc* trouver_bloc_plus_haut_gauche_piece(t_piece *piece)
     for (num_bloc = 1; num_bloc < piece->nb_blocs; num_bloc++)
     {
         t_bloc *bloc_courant = &piece->blocs[num_bloc];
-        if (bloc_courant->coord.y <= bloc_plus_haut_gauche->coord.y &&
-            bloc_courant->coord.x <= bloc_plus_haut_gauche->coord.x)
+        if (bloc_courant->coord.y < bloc_plus_haut_gauche->coord.y)
         {
             bloc_plus_haut_gauche = bloc_courant;
+        }
+        else if (bloc_courant->coord.y == bloc_plus_haut_gauche->coord.y)
+        {
+            if (bloc_courant->coord.x < bloc_plus_haut_gauche->coord.x)
+            {
+                bloc_plus_haut_gauche = bloc_courant;
+            }
         }
     }
 
